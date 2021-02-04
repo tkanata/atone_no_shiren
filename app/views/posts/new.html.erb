@@ -1,0 +1,6 @@
+<h1>posts#new</h1>
+<%= form_for(@post, url: {controller: 'posts', action: 'create'}) do |f| %>
+  <%= f.text_field :card_info %>
+  <%= f.submit "Check" %>
+<% end %>
+
