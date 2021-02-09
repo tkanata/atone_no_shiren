@@ -1,5 +1,15 @@
 <h1>posts#show</h1>
-<%= @post.card_info %>
-<%= link_to("やり直す","/", method: "get") %>
 
+<%#= form_for(@post, url: {controller: 'posts', action: 'create'}) do |f| %>
+  <%#= f.text_field :card_info %>
+  <%#= f.submit "Check" %>
+<%# end %>
+
+<%#= @post.card_info %>
+<%#= link_to("やり直す","/", method: "get") %>
+
+<%= render partial: "layouts/form", locals: { post: @post.card_info } %>
+<% if params[:card_info] %>
+  <%= @post.card_info %>
+<% end %>
 

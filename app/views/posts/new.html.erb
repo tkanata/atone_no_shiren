@@ -1,6 +1,12 @@
 <h1>posts#new</h1>
-<%= form_for(@post, url: {controller: 'posts', action: 'create'}) do |f| %>
-  <%= f.text_field :card_info %>
-  <%= f.submit "Check" %>
+<%#= form_for(@post, url: {controller: 'posts', action: 'create'}) do |f| %>
+  <%#= f.text_field :card_info %>
+  <%#= f.submit "Check" %>
+<%# end %>
+
+<%= render partial: "layouts/form", locals: { post: @post.card_info } %>
+<% if params[:card_info] %>
+  <%= params[:card_info] %>
 <% end %>
+
 

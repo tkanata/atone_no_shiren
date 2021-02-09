@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_02_020111) do
+ActiveRecord::Schema.define(version: 2021_02_09_032826) do
 
   create_table "posts", force: :cascade do |t|
     t.string "card_info"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "post_id"
+    t.string "integer"
   end
 
 end

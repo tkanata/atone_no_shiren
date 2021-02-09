@@ -22,5 +22,16 @@ module AtonePractice
     # app/api以下のrbファイルをautoload
     #config.paths.add File.join('app', 'apis'), glob: File.join('**', '*.rb')
     #config.autoload_paths += Dir[Rails.root.join('app', 'apis', '*')]
+
+    config.generators do |g|
+      g.test_framework :rspec
+
+      # Railsジェネレータがfactory_bot用のファイルを生成するのを無効化
+      #g.factory_bot false
+
+      # ファクトリファイルの置き場を変更
+      #g.factory_bot dir: 'custom/dir/for/factories'
+    end
+
   end
 end

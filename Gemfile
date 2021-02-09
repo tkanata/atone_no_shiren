@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.0'
+ruby '2.5.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.1'
@@ -26,11 +26,15 @@ gem 'jbuilder', '~> 2.7'
 # gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', require: false
+#gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'grape', '~> 1.5', '>= 1.5.1'
 gem 'grape-jbuilder', '~> 0.2.0'
 gem 'hashie', '~> 4.1'
+gem 'rexml', '~> 3.2', '>= 3.2.4'
+
+# ランダムな名前やメールアドレスを生成する
+gem 'faker', '~> 2.15', '>= 2.15.1'
 
 gem 'rabl', '~> 0.14.3'
 
@@ -40,6 +44,7 @@ group :development, :test do
   gem 'rspec', '~> 3.10'
   gem 'spring-commands-rspec', '~> 1.0', '>= 1.0.4'
   gem 'rspec-rails', '~> 4.0', '>= 4.0.2'
+  gem 'factory_bot_rails', '~> 6.1'
 end
 
 group :development do
