@@ -1,7 +1,9 @@
 <h1>posts#result</h1>
 <%= render partial: "layouts/form", locals: { post: @post } %>
-<% if @post.card_info %>
-  <%= @post.card_info %>
+<% if @post.valid? %>
+  <%#= @post.card_info %>
+  <%= @hand %>
+
   <%#= hand = Poker.new %>
       <%#= hand = hand.poker_flash_straight(card_info) %>
       <%# if @hand == nil %>
@@ -9,3 +11,15 @@
         <%#= hand = hand.poker_numerical(card_info) %>
       <%# end %>
 <% end %>
+
+<div>
+  <% if @post.errors.any? %>
+    <div class = "alert">
+      <ul>
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
