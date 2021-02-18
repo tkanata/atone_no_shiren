@@ -43,7 +43,7 @@ class Post < ApplicationRecord
   #match = params[:card_info].match(/\A(?<card1>[SDHC](?:[1][0123]|[123456789])) (?<card2>[SDHC](?:[1][0123]|[123456789])) (?<card3>[SDHC](?:[1][0123]|[123456789])) (?<card4>[SDHC](?:[1][0123]|[123456789])) (?<card5>[SDHC](?:[1][0123]|[123456789]))\z/)
 
   #重複の検出
-  VALID_INPUT_DUP_REGEX = /([SHDC](?:[1][0123]\b|[123456789]\b)).+(\1)/
+  VALID_INPUT_DUP_REGEX = /([SHDC](?:[1][0123]\b|[123456789]\b)).+\b(\1)\b/
 
   #validates :card_info, presence: {message: "入力してください"}, on: :new
   #validates :card_info, presence: {message: "入力してください"}, on: :result
