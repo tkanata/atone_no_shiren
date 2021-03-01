@@ -1,5 +1,14 @@
 module PokerHands
-  def poker(card)
+  include HandCommon
+
+  # web appとAPIで入力が異なるので、それぞれに合わせたメソッドを用意する
+  # 具体的には、web appからの入力にはハッシュのキーを指定する必要がある
+  # APIの場合は配列の要素が入力されるのでキーの情報は必要ない
+  # そのため、web appの場合のみ、.card_info といった記述が必要になる
+
+  ##############################################
+  # web app用の判定メソッド
+  def poker_web(card)
     #フラッシュ、ストレートフラッシュ、ストレートの判定
     # スートの判定プログラム
     # scanメソッドでH, S, C, D を取得。配列で返す
@@ -30,15 +39,16 @@ module PokerHands
 
     # ストレートフラッシュ、ストレート、フラッシュの判定
     if @notice == "straight" and @flash == 1
-      @hand = "straight flash"
+      @hand = "ストレートフラッシュ"
     elsif @notice == "straight"
-      @hand = "straight"
+      @hand = "ストレート"
     elsif @flash == 1
-      @hand = "flash"
+      @hand = "フラッシュ"
     else
       @hand = nil
     end
 
+    #ストレートフラッシュ、フラッシュ、ストレートのいずれかならば、@handを返して終了する
     if @hand != nil
       return @hand
     end
@@ -50,38 +60,8 @@ module PokerHands
     num = num.sort
     num = num.map!(&:to_i)
 
-    # 数字ごとにグループ化してハッシュ形式にしました。
-    group = num.group_by(&:itself).map{ |key, value| [key, value.count] }.to_h
+    # numをweb appとAPIの共通処理メソッドに渡す
+    return HandCommon.hand_common(num)
 
-    group.values.sort.reverse.each do |value|
-      @pair = 0
-      if value == 4
-        @hand = "four of a kind"
-        break
-      elsif value == 3
-        @three_of_a_kind = 1
-      elsif value == 2
-        if @three_of_a_kind == 1
-          @hand = "full house"
-        elsif
-        @pair += 1
-          if @pair == 2
-            @hand = "two pair"
-            break
-          else
-            @hand = "one pair"
-            break
-          end
-        end
-      else
-        if @three_of_a_kind == 1
-          @hand = "three of a kind"
-        else
-          @hand = "high card"
-        end
-      end
-    end
-
-    return @hand
   end
 end

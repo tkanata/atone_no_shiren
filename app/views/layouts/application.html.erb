@@ -9,8 +9,15 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
+  <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+<div class = "main-container">
   <body>
-    <%= yield %>
+  <center>
+    <h1> Check a Poker Hand </h1>
+    <div class="main-back">
+      <%= yield %>
+    </div>
+  </center>
   </body>
+</div>
 </html>

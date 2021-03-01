@@ -2,51 +2,23 @@ require 'rails_helper'
 
 RSpec.describe "Posts", type: :request do
 
-  describe "GET #new" do
-    it "shows #new template" do
-      get "/"
-      expect(response).to render_template :new
-    end
-
-    #newメソッド使えないらしいので、もしかしてこれはテストできない？
-    it "assigns new model instance to @post"
-  end
-
-  describe "GET #result" do
-    it "shows #new template" do
-      #"/result"にGETリクエストを出した時、newテンプレートを表示する
-      get "/result"
-      expect(response).to render_template :new
-    end
-  end
-
-  describe "POST #result" do
-    context "when @post is valid" do
-      it "sends a POST request" do
-        post "/result", :params => {:post => {:card_info => "S1 S2 S3 S4 H5"}}
-        #↓@postにカード情報を渡して、result内での処理に使う
-        #params.merge(card_info: "S1 S2 S3 S4 H5")
-        #@post = Post.new(params[:card_info])
-        expect(response.status).to eq 200
+  describe "Post request" do
+    context "when input is valid" do
+      it "responds successfully" do
+        post "/api/v1/cards", params: { cards: ["H1 H13 H12 H11 H10", "S1 H1 D1 S4 H4", "S1 S2 S3 S4 S5"] }
+        expect(response.status).to eq(201)
       end
-
-      #it "returns straight" do
-      # post :result, params: {card_info: "S1 S2 S3 S4 H5"}
-      # expect(@hand).to eq "straight"
-      #end
-      #it "returns straight flash"
-      #it "returns flash"
-      #it "returns four of a kind"
-      #it "returns three of a kind"
-      #it "returns full house"
-      #it "returns one pair"
-      #it "returns two pair"
-      #it "returns high card"
     end
 
-    context "when @post is not valid" do
-      it "returns empty instance @hand"
+    # 入力値が空のカードを含んでいても、値は受け取られる
+    # APIでは、全ての結果を出力形式にして返すメソッド内で行われるバリデーションが失敗したら、400を返すように記述してある
+    context "when input is invalid" do
+      it "does not respond successfully" do
+        post "/api/v1/cards", params: { poker: ["S1 S2 S3 S4 S5", "S1 H1 D1 S4 H4", "S1 S2 S3 S4 S5"] }
+        expect(response.status).to eq(400)
+      end
     end
+
   end
 
 end

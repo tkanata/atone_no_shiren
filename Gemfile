@@ -28,7 +28,7 @@ gem 'jbuilder', '~> 2.7'
 # Reduces boot times through caching; required in config/boot.rb
 #gem 'bootsnap', '>= 1.4.4', require: false
 
-gem 'grape', '~> 1.5', '>= 1.5.1'
+gem 'grape', '~> 1.5', '>= 1.5.2'
 gem 'grape-jbuilder', '~> 0.2.0'
 gem 'hashie', '~> 4.1'
 gem 'rexml', '~> 3.2', '>= 3.2.4'
@@ -39,6 +39,10 @@ gem 'faker', '~> 2.15', '>= 2.15.1'
 gem 'rabl', '~> 0.14.3'
 
 gem 'rails-i18n', '~> 6.0'
+
+gem 'rack', '~> 2.2', '>= 2.2.3'
+
+gem 'json-schema', '~> 2.8', '>= 2.8.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

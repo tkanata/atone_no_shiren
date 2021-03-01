@@ -7,8 +7,8 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 
-module ApiSample
-  class Application < Rails::Application
+#module ApiSample
+#class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     #config.load_defaults 6.1
 
@@ -18,13 +18,13 @@ module ApiSample
     # the framework and any gems in your application.
 
     # For Grape
-    config.paths.add File.join('app', 'apis'), glob: File.join('**', '*.rb')
-    config.autoload_paths += Dir[Rails.root.join('app', 'apis', '*')]
+    #config.paths.add File.join('app', 'apis'), glob: File.join('**', '*.rb')
+    #config.autoload_paths += Dir[Rails.root.join('app', 'apis', '*')]
     #config.middleware.use(Rack::Config) do |env|
     #env['api.tilt.root'] = Rails.root.join 'app', 'views', 'api'
     #end
-  end
-end
+#end
+#end
 
 
 module AtonePractice
@@ -32,12 +32,13 @@ module AtonePractice
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
+    config.paths.add 'lib', eager_load: true
+
     # to auto load lib/ directory
-    config.autoload_paths += %W(#{config.root}/lib)
+    #config.autoload_paths += %W(#{config.root}/lib)
 
-
-    #config.i18n.default_locale = :ja
-    #config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml').to_s]
+    config.i18n.default_locale = :ja
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.yml').to_s]
 
     # Configuration for the application, engines, and railties goes here.
     #

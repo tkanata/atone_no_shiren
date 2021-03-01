@@ -1,4 +1,9 @@
 <%= form_for(post, url: '/result') do |f| %>
-  <%= f.text_field :card_info %>
-  <%= f.submit "Check" %>
+  <%#= f.label "S1 S2 S3 S4 S5" %>
+  <div>
+    <%= f.text_field :card_info, :placeholder => "S1 S2 S3 S4 S5", :autocomplete => "off" %>
+  </div>
+  <div class="btn">
+    <%= f.submit "Check" %>
+  </div>
 <% end %>
