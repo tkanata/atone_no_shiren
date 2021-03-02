@@ -250,7 +250,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     thor (1.1.0)
     tilt (2.0.10)
     tilt-jbuilder (0.7.1)
@@ -311,7 +310,6 @@ DEPENDENCIES
   selenium-webdriver
   spring
   spring-commands-rspec (~> 1.0, >= 1.0.4)
-  sqlite3 (~> 1.4)
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 4.1.0)
@@ -322,4 +320,4 @@ RUBY VERSION
    ruby 2.5.8p224
 
 BUNDLED WITH
-   2.2.8
+   2.2.11
