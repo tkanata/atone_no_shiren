@@ -31,7 +31,7 @@ RSpec.feature "Posts", type: :feature do
 
   scenario "user submit no cards on /result page" do
     visit '/result'
-    fill_in "post[card_info]", with: ""
+    fill_in "post[card_info]", with: ''
     click_button "Check"
     expect(page).to have_content "値を入力してください"
   end

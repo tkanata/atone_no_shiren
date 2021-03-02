@@ -56,11 +56,6 @@ class Post < ApplicationRecord
 
 end
 
-
-
-
-
-
 # 無駄に作ってしまったけどもったいなくて残している正規表現達の墓場
 
 # VALID_CARD_1ST_REGEX = /\A([SHDC](?:[1][0123]\b|[123456789]\b))/

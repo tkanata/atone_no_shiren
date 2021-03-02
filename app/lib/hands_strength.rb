@@ -1,145 +1,12 @@
-module PokerHands
-  # web appとAPIで入力が異なるので、それぞれに合わせたメソッドを用意する
-  # 具体的には、web appからの入力にはハッシュのキーを指定する必要がある
-  # APIの場合は配列の要素が入力されるのでキーの情報は必要ない
-  # そのため、web appの場合のみ、.card_info といった記述が必要になる
-
-  # web app用の判定メソッド
-  def poker_web(card)
-    #フラッシュ、ストレートフラッシュ、ストレートの判定
-    # スートの判定プログラム
-    # scanメソッドでH, S, C, D を取得。配列で返す
-    heart = card.card_info.scan("H")
-    club = card.card_info.scan("C")
-    spade = card.card_info.scan("S")
-    dia = card.card_info.scan("D")
-
-    # フラッシュの判定
-    if heart.size == 5 || club.size ==5 || spade.size == 5 || dia.size ==5
-      @flash = 1
-    end
-
-    # 連番の判定
-    num = card.card_info.scan(/\d+/)
-
-    num = num.sort
-
-    for n in 1..4 do
-      if num[0].to_i + n != num[n].to_i
-        @notice = "not straight or flash"
-        break
-      else
-        #puts "#{num}"
-        @notice = "straight"
-      end
-    end
-
-    # ストレートフラッシュ、ストレート、フラッシュの判定
-    if @notice == "straight" and @flash == 1
-      @hand = "ストレートフラッシュ"
-    elsif @notice == "straight"
-      @hand = "ストレート"
-    elsif @flash == 1
-      @hand = "フラッシュ"
-    else
-      @hand = nil
-    end
-
-    #ストレートフラッシュ、フラッシュ、ストレートのいずれかならば、@handを返して終了する
-    if @hand != nil
-      return @hand
-    end
-
-    #フラッシュ系、ストレート系以外の役の判定
-    # 数字の重複の判定
-    # 整数化
-    num = card.card_info.scan(/\d+/)
-    num = num.sort
-    num = num.map!(&:to_i)
-
-    # numをweb appとAPIの共通処理メソッドに渡す
-    return HandCommon.hand_common(num)
-
-  end
-
-
-
-  ########################################
-  # API用の役判定メソッド
-  def self.poker_api(card)
-    include HandCommon
-
-    @flash = nil
-
-    #フラッシュ、ストレートフラッシュ、ストレートの判定
-    # スートの判定プログラム
-    # scanメソッドでH, S, C, D を取得。配列で返す
-    heart = card.scan("H")
-    club = card.scan("C")
-    spade = card.scan("S")
-    dia = card.scan("D")
-
-    # フラッシュの判定
-    if heart.size == 5 || club.size ==5 || spade.size == 5 || dia.size ==5
-      @flash = 1
-    end
-
-    # 連番の判定
-    num = card.scan(/\d+/)
-
-    num = num.sort
-
-    for n in 1..4 do
-      if num[0].to_i + n != num[n].to_i
-        @notice = "not straight or flash"
-        break
-      else
-        #puts "#{num}"
-        @notice = "straight"
-      end
-    end
-
-    # ストレートフラッシュ、ストレート、フラッシュの判定
-    if @notice == "straight" and @flash == 1
-      @hand = "ストレートフラッシュ"
-    elsif @notice == "straight"
-      @hand = "ストレート"
-    elsif @flash == 1
-      @hand = "フラッシュ"
-    else
-      @hand = nil
-    end
-
-    #ストレートフラッシュ、フラッシュ、ストレートのいずれかならば、@handを返して終了する
-    if @hand != nil
-      return @hand
-    end
-
-    #フラッシュ系、ストレート系以外の役の判定
-    # 数字の重複の判定
-    # 整数化
-    num = card.scan(/\d+/)
-    num = num.sort
-    num = num.map!(&:to_i)
-
-    # numをweb appとAPIの共通処理メソッドに渡す
-    return HandCommon.hand_common(num)
-
-  end
-end
-
-
 module HandsStrength
   include PokerHands
 
   # APIに入力された複数の5枚組のカード情報から役の強さを判定するメソッド
   # 入力はAPIにおいてparams[:cards]として取得された、配列を想定
   # 出力は card, hand, best をキーとしたハッシュとする
-  def self.hands(cards_arr)
-    # 配列を引数とする
-    # PokerHandsモジュールのpoker_apiメソッドで役を判定。@each_handに格納
 
-    # 結果は配列に格納したいので、mapメソッドを用いる
+  def self.hands(cards_arr)
+
     each_hand = cards_arr.map { |cards|
       PokerHands.poker_api(cards)
     }
@@ -148,7 +15,6 @@ module HandsStrength
     each_hand_hash = cards_arr.zip(each_hand).to_h
 
     # 役の強さはそれぞれに割り振った数字で管理する
-    # 以下はハッシュの宣言
     strength = {
       9 => "ストレートフラッシュ",
       8 => "フォー・オブ・ア・カインド",
@@ -158,7 +24,7 @@ module HandsStrength
       4 => "スリー・オブ・ア・カインド",
       3 => "ツーペア",
       2 => "ワンペア",
-      1 => "ハイカード"
+      1 => "ハイカード",
     }
     strength.class
 
@@ -228,9 +94,12 @@ module HandsStrength
 
     # 表示する結果は以下のハッシュ
     unless cards_errors_hash.empty?
-      return @hash = {result: result, error: cards_errors_hash}
+      return @hash = {
+        result: result,
+        error: cards_errors_hash,
+      }
     else
-      return @hash = {result: result}
+      return @hash = { result: result }
     end
   end
 end

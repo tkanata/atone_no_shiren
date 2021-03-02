@@ -60,9 +60,21 @@ RSpec.describe "HandsStrength" do
         input = ["H1 H13 H12 H11 H10", "S1 H1 D1 S4 H4", "S12 D12 H5 C1 S10"]
         expect(HandsStrength.hands(input)).to eq(
                                                 [
-                                                  {"card" => "H1 H13 H12 H11 H10", "hand" => "フラッシュ", "best" => "false"},
-                                                 {"card" => "S1 H1 D1 S4 H4", "hand" => "フルハウス", "best" => "true"},
-                                                 {"card" => "S12 D12 H5 C1 S10", "hand" => "ワンペア", "best" => "false"}
+                                                  {
+                                                    "card" => "H1 H13 H12 H11 H10",
+                                                    "hand" => "フラッシュ",
+                                                    "best" => "false"
+                                                  },
+                                                 {
+                                                    "card" => "S1 H1 D1 S4 H4",
+                                                    "hand" => "フルハウス",
+                                                    "best" => "true"
+                                                  },
+                                                 {
+                                                    "card" => "S12 D12 H5 C1 S10",
+                                                    "hand" => "ワンペア",
+                                                    "best" => "false"
+                                                  },
                                                 ]
                                               )
       end
@@ -103,7 +115,7 @@ RSpec.describe "HandsStrength" do
                                                           {
                                                             "card" => "S12 D12 H5 C1S10",
                                                             "msg" => "5つのカード指定文字を半角スペース区切りで入力してください。（例：\"S1 H3 D9 C13 S11\"）"
-                                                          }
+                                                          },
                                                         ]
                                                       }
                                                     )

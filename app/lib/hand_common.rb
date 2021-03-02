@@ -7,9 +7,10 @@ module HandCommon
   def self.hand_common(num)
 
     # 数字ごとにグループ化してハッシュ形式にしました。
-    group = num.group_by(&:itself).map{ |key, value| [key, value.count] }.to_h
+    group = num.group_by(&:itself).map do |key, value|
+      [key, value.count]
+      end.to_h
 
-    # 数字を降順に並べ替えて、同じ数字を数える
     # 同じ数字の数で役を見分けている
     # 役が確定した段階でif文から抜け、@hand を戻り値として処理を終了する
     @pair = 0
