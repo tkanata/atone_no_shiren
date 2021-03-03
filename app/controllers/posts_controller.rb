@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  include PokerHands
+  include HandCommon
   protect_from_forgery
 
   def new
@@ -9,7 +9,8 @@ class PostsController < ApplicationController
   def result
     @post = Post.new(post_params)
     @post.valid?
-    poker_web(@post)
+    card = @post.card_info
+    @hand = HandCommon.hand_common(card)
   end
 
   private

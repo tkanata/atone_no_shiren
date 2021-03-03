@@ -1,24 +1,23 @@
+<div>
+  <h2><span class="h2_span">Posts#result</span></h2>
+ 
+  <%= render partial: "layouts/form", locals: { post: @post } %>
+
+  <% if @post.valid? %>
+    <div class="hand">
+      <%= @hand %>
+      <%# byebug %>
+    </div>
+  <% end %>
 
   <div>
-    <h2><span class="h2_span">Posts#result</span></h2>
-
-    <%= render partial: "layouts/form", locals: { post: @post } %>
-
-    <% if @post.valid? %>
-      <div class="hand">
-        <%= @hand %>
-        <%# byebug %>
+    <% if @post.errors.any? %>
+      <div class = "alert">
+        <% @post.errors.full_messages.each do |message| %>
+          <%= message %> <br>
+          <% end %>
       </div>
     <% end %>
-
-    <div>
-      <% if @post.errors.any? %>
-        <div class = "alert">
-            <% @post.errors.full_messages.each do |message| %>
-              <%= message %> <br>
-            <% end %>
-        </div>
-      <% end %>
-    </div>
+  </div>
 </div>
 
