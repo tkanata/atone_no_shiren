@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
-  root "posts#new"
-  #get  "/" => "posts#new"
-  get "/result" => "posts#new"
-  post "/result" => "posts#result"
+  root "pokers#new"
+  #get  "/" => "pokers#new"
+  get "/result" => "pokers#new"
+  post "/result" => "pokers#result"
 
   #APIの設定
   mount API::Root => '/'

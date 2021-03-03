@@ -64,7 +64,7 @@ module HandsStrength
   ######################################
   def self.output_api(params)
     errors = params.map do |each_card|
-      b = Post.new(card_info: each_card)
+      b = Poker.new(card_info: each_card)
       b.validate
       errors_arr = b.errors.full_messages
       # エラーメッセージは配列に格納されている。今回は1つしかメッセージが出ないので、0番目の要素のみを取り出している
@@ -86,7 +86,7 @@ module HandsStrength
     end
 
     valid_params = params.delete_if do |param|
-      Post.new(card_info: param).validate == false
+      Poker.new(card_info: param).validate == false
     end
 
     result = HandsStrength.hands(valid_params)

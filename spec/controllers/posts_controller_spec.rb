@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PostsController, type: :controller do
+RSpec.describe PokersController, type: :controller do
 
   # newアクションが適切に応答しているかどうかのテスト
   describe 'new' do
@@ -11,35 +11,35 @@ RSpec.describe PostsController, type: :controller do
   end
 
   # resultアクションにおいてカード情報を更新できるかどうかのテスト
-  # 入力が不正だとしても、バリデーションはモデルの仕事なので値は@postに保持される
+  # 入力が不正だとしても、バリデーションはモデルの仕事なので値は@pokerに保持される
 
   describe 'result' do
-    context 'when @post receives valid card information from a form' do
+    context 'when @poker receives valid card information from a form' do
 
       before do
-        @post = FactoryBot.build(:post)
+        @poker = FactoryBot.build(:poker)
       end
 
-      it 'adds a card information to @post' do
-        post_params = FactoryBot.attributes_for(:post, card_info: 'H1 H2 H3 H4 H5')
-        post :result, params: {post: post_params}
-        @post = Post.new(post_params)
-        expect(@post.card_info).to eq 'H1 H2 H3 H4 H5'
+      it 'adds a card information to @poker' do
+        poker_params = FactoryBot.attributes_for(:poker, card_info: 'H1 H2 H3 H4 H5')
+        post :result, params: {poker: poker_params}
+        @poker = Poker.new(poker_params)
+        expect(@poker.card_info).to eq 'H1 H2 H3 H4 H5'
       end
 
     end
 
-    context 'when @post receives invalid card information from a form' do
+    context 'when @poker receives invalid card information from a form' do
 
       before do
-        @post = FactoryBot.build(:post)
+        @poker = FactoryBot.build(:poker)
       end
 
-      it 'adds a card information to @post' do
-        post_params = FactoryBot.attributes_for(:post, card_info: 'H1 H2 H3 H4')
-        post :result, params: {post: post_params}
-        @post = Post.new(post_params)
-        expect(@post.card_info).to eq 'H1 H2 H3 H4'
+      it 'adds a card information to @poker' do
+        poker_params = FactoryBot.attributes_for(:poker, card_info: 'H1 H2 H3 H4')
+        post :result, params: {poker: poker_params}
+        @poker = Poker.new(poker_params)
+        expect(@poker.card_info).to eq 'H1 H2 H3 H4'
       end
 
     end

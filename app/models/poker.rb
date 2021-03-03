@@ -1,4 +1,4 @@
-class PostValidator < ActiveModel::Validator
+class PokerValidator < ActiveModel::Validator
   #カード5枚分の入力を分割して、1枚ずつバリデーションをかけるメソッド
   def validate(record)
     # 入力が存在しかつ単語がスペース区切りの場合のみ重複とカードごとのバリデーションを実行する
@@ -28,14 +28,14 @@ class PostValidator < ActiveModel::Validator
 end
 
 
-class Post < ApplicationRecord
+class Poker < ApplicationRecord
   include ActiveModel::Model
   include ActiveModel::Validations
 
   attr_accessor :card_info
 
   #カスタムバリデーション。空白 > 5単語が半角スペース区切り > 重複 > 不適切なカード情報 という優先順位の条件分岐
-  validates_with PostValidator
+  validates_with PokerValidator
 
 end
 

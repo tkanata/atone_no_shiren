@@ -5,53 +5,6 @@ include HandsStrength
 
 RSpec.describe 'HandsStrength' do
 
-  # APIからの入力からポーカーの役を判定するメソッドのテスト
-  describe 'self.common(card)' do
-    context 'when input is valid' do
-      it 'returns ストレートフラッシュ' do
-        input = 'S1 S2 S3 S4 S5'
-        expect(HandCommon.hand_common(input)).to eq('ストレートフラッシュ')
-      end
-      it 'returns フラッシュ' do
-        input = 'S1 S2 S3 S4 S9'
-        expect(HandCommon.hand_common(input)).to eq('フラッシュ')
-      end
-      it 'returns ストレート' do
-        input = 'D1 H2 C3 S4 D5'
-        expect(HandCommon.hand_common(input)).to eq('ストレート')
-      end
-      it 'returns フォー・オブ・ア・カインド' do
-        input = 'S1 D9 H9 C9 S9'
-        expect(HandCommon.hand_common(input)).to eq('フォー・オブ・ア・カインド')
-      end
-      it 'returns フルハウス' do
-        input = 'S1 D1 H9 C9 S9'
-        expect(HandCommon.hand_common(input)).to eq('フルハウス')
-      end
-      it 'returns スリー・オブ・ア・カインド' do
-        input = 'S1 D12 H9 C9 S9'
-        expect(HandCommon.hand_common(input)).to eq('スリー・オブ・ア・カインド')
-      end
-      it 'returns ツーペア' do
-        input = 'S1 D1 H9 C9 S13'
-        expect(HandCommon.hand_common(input)).to eq('ツーペア')
-      end
-      it 'returns ワンペア' do
-        input = 'S1 D1 H11 C5 S8'
-        expect(HandCommon.hand_common(input)).to eq('ワンペア')
-      end
-      it 'returns ハイカード' do
-        input = 'S12 D4 H7 C9 S13'
-        expect(HandCommon.hand_common(input)).to eq('ハイカード')
-      end
-    end
-
-    # context 'when input is empty' do
-    # it ''
-    # end
-
-  end
-
   # APIに入力された複数の5枚組のカード情報から役の強さを判定するメソッドのテスト
   describe 'self.hands(cards_arr)' do
     context 'when input is valid' do
