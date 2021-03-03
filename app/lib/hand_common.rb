@@ -9,16 +9,16 @@ module HandCommon
     #フラッシュ、ストレートフラッシュ、ストレートの判定
     # スートの判定プログラム
     # scanメソッドでH, S, C, D を取得。配列で返す
-    heart = card.scan("H")
-    club = card.scan("C")
-    spade = card.scan("S")
-    dia = card.scan("D")
+    heart = card.scan('H')
+    club = card.scan('C')
+    spade = card.scan('S')
+    dia = card.scan('D')
 
-    @flash = nil
+    flash = nil
 
     # フラッシュの判定
     if heart.size == 5 || club.size ==5 || spade.size == 5 || dia.size ==5
-      @flash = 1
+      flash = 1
     end
 
     # 連番の判定
@@ -26,20 +26,20 @@ module HandCommon
 
     for n in 1..4 do
       if num[0].to_i + n != num[n].to_i
-        @notice = "not straight or flash"
+        notice = 'not straight or flash'
         break
       else
-        @notice = "straight"
+        notice = 'straight'
       end
     end
 
     # ストレートフラッシュ、ストレート、フラッシュの判定
-    if @notice == "straight" and @flash == 1
-      @hand = "ストレートフラッシュ"
-    elsif @notice == "straight"
-      @hand = "ストレート"
-    elsif @flash == 1
-      @hand = "フラッシュ"
+    if notice == 'straight' && flash == 1
+      @hand = 'ストレートフラッシュ'
+    elsif notice == 'straight'
+      @hand = 'ストレート'
+    elsif flash == 1
+      @hand = 'フラッシュ'
     else
       @hand = nil
     end
@@ -62,28 +62,28 @@ module HandCommon
     @three_of_a_kind = 0
     group.values.sort.reverse.each do |value|
       if value == 4
-        @hand = "フォー・オブ・ア・カインド"
+        @hand = 'フォー・オブ・ア・カインド'
         break
       elsif value == 3
         @three_of_a_kind = 1
       elsif value == 2
         @pair += 1
         if @three_of_a_kind == 1
-          @hand = "フルハウス"
+          @hand = 'フルハウス'
           break
         end
       else
         if @three_of_a_kind == 1
-          @hand = "スリー・オブ・ア・カインド"
+          @hand = 'スリー・オブ・ア・カインド'
           break
         end
       end
       if @pair == 1
-        @hand = "ワンペア"
+        @hand = 'ワンペア'
       elsif @pair == 2
-        @hand = "ツーペア"
+        @hand = 'ツーペア'
       else
-        @hand = "ハイカード"
+        @hand = 'ハイカード'
       end
     end
 

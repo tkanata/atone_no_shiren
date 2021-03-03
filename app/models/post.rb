@@ -10,35 +10,18 @@ class PostValidator < ActiveModel::Validator
       if record.card_info.match(/([SHDC](?:[1][0123]\b|[123456789]\b)).+\b(\1)\b/)
         record.errors[:card_info] << 'カードが重複しています'
       end
+      
 
-      @invalid = 0
-      if record.card_info.split(" ")[0] !~ /([SHDC](?:[1][0123]\b|[123456789]\b))/
-        record.errors[:card_info] << "1枚目のカード情報が適切ではありません。(#{record.card_info.split(" ")[0]})"
-        @invalid = 1
+      invalid = false
+      record.card_info.split(' ').each_with_index do |card, index|
+        if card !~ /([SHDC](?:[1][0123]\b|[123456789]\b))/
+          record.errors[:card_info] << "#{index + 1}枚目のカード情報が適切ではありません。(#{card})"
+          invalid = true
+        end
       end
 
-      if record.card_info.split(" ")[1] !~ (/([SHDC](?:[1][0123]\b|[123456789]\b))/)
-        record.errors[:card_info] << "2枚目のカード情報が適切ではありません。(#{record.card_info.split(" ")[1]})"
-        @invalid = 1
-      end
-
-      if record.card_info.split(" ")[2] !~ (/([SHDC](?:[1][0123]\b|[123456789]\b))/)
-        record.errors[:card_info] << "3枚目のカード情報が適切ではありません。(#{record.card_info.split(" ")[2]})"
-        @invalid = 1
-      end
-
-      if record.card_info.split(" ")[3] !~ (/([SHDC](?:[1][0123]\b|[123456789]\b))/)
-        record.errors[:card_info] << "4枚目のカード情報が適切ではありません。(#{record.card_info.split(" ")[3]})"
-        @invalid = 1
-      end
-
-      if record.card_info.split(" ")[4] !~ (/([SHDC](?:[1][0123]\b|[123456789]\b))/)
-        record.errors[:card_info] << "5枚目のカード情報が適切ではありません。(#{record.card_info.split(" ")[4]})"
-        @invalid = 1
-      end
-
-      if @invalid == 1
-        record.errors[:card_info] << "半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。"
+      if invalid == true
+        record.errors[:card_info] << '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。'
       end
     end
   end

@@ -1,14 +1,13 @@
 module HandsStrength
-  include PokerHands
+  include HandCommon
 
   # APIに入力された複数の5枚組のカード情報から役の強さを判定するメソッド
-  # 入力はAPIにおいてparams[:cards]として取得された、配列を想定
   # 出力は card, hand, best をキーとしたハッシュとする
 
   def self.hands(cards_arr)
 
     each_hand = cards_arr.map { |cards|
-      PokerHands.poker_api(cards)
+      HandCommon.hand_common(cards)
     }
 
     # 入力されたカードの組とその役をハッシュに変換している(keyがカード、valueが役)
