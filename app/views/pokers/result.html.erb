@@ -1,0 +1,23 @@
+<div>
+  <h2><span class="h2_span">Pokers#result</span></h2>
+ 
+  <%= render partial: "layouts/form", locals: { poker: @poker } %>
+
+  <% if @poker.valid? %>
+    <div class="hand">
+      <%= @hand %>
+      <%# byebug %>
+    </div>
+  <% end %>
+
+  <div>
+    <% if @poker.errors.any? %>
+      <div class = "alert">
+        <% @poker.errors.full_messages.each do |message| %>
+          <%= message %> <br>
+          <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
