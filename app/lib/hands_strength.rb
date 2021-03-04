@@ -16,15 +16,15 @@ module HandsStrength
 
     # 役の強さはそれぞれに割り振った数字で管理する
     strength = {
-      9 => "ストレートフラッシュ",
-      8 => "フォー・オブ・ア・カインド",
-      7 => "フルハウス",
-      6 => "フラッシュ",
-      5 => "ストレート",
-      4 => "スリー・オブ・ア・カインド",
-      3 => "ツーペア",
-      2 => "ワンペア",
-      1 => "ハイカード",
+      9 => 'ストレートフラッシュ',
+      8 => 'フォー・オブ・ア・カインド',
+      7 => 'フルハウス',
+      6 => 'フラッシュ',
+      5 => 'ストレート',
+      4 => 'スリー・オブ・ア・カインド',
+      3 => 'ツーペア',
+      2 => 'ワンペア',
+      1 => 'ハイカード',
     }
     strength.class
 
@@ -45,16 +45,16 @@ module HandsStrength
     # 入力されたカードの組が最も強い役を持つかどうかを判定する
     strongest_boolean = cards_arr.map { |cards|
       if cards == strongest_cards
-        cards = "true"
+        cards = 'true'
       else
-        cards = "false"
+        cards = 'false'
       end
     }
 
-    # 入力されたカードの "組"、"役"、"最強かどうかの真理値" を配列に格納する
+    # 入力されたカードの '組'、'役'、'最強かどうかの真理値' を配列に格納する
     input_hand_strongest = cards_arr.zip(each_hand, strongest_boolean)
     @input_hand_strongest_hash = input_hand_strongest.map do |input_hash|
-        ["card", "hand", "best"].zip(input_hash).to_h
+        ['card', 'hand', 'best'].zip(input_hash).to_h
     end
 
     return @input_hand_strongest_hash
@@ -80,9 +80,9 @@ module HandsStrength
       error.empty?
     end
 
-    # エラーの配列から"card"と"msg"をキーとするハッシュを作っている
+    # エラーの配列から'card'と'msg'をキーとするハッシュを作っている
     cards_errors_hash = cards_errors_arr.map do |each_pair|
-      name = ["card", "msg"]
+      name = ['card', 'msg']
       name.zip(each_pair).to_h
     end
 
