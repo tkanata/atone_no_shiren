@@ -3,18 +3,19 @@ class PokerValidator < ActiveModel::Validator
   def validate(record)
     # 入力が存在しかつ単語がスペース区切りの場合のみ重複とカードごとのバリデーションを実行する
     if record.card_info.empty?
-      record.errors[:card_info] << '値を入力してください'
-    elsif !record.card_info.match(/\A\w+ \w+ \w+ \w+ \w+\z/)
-      record.errors[:card_info] << '5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+      record.errors[:card_info] << '値を入力してください。'
     else
-      if record.card_info.match(/([SHDC](?:[1][0123]\b|[123456789]\b)).+\b(\1)\b/)
-        record.errors[:card_info] << 'カードが重複しています'
+      if !record.card_info.match(/\A\w+ \w+ \w+ \w+ \w+\z/)
+        record.errors[:card_info] << '5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+      end
+      if record.card_info.match(/([SHDC](?:[1][0-3]\b|[1-9]\b)).+\b(\1)\b/)
+        record.errors[:card_info] << 'カードが重複しています。'
       end
       
 
       invalid = false
       record.card_info.split(' ').each_with_index do |card, index|
-        if card !~ /([SHDC](?:[1][0123]\b|[123456789]\b))/
+        if card !~ /([SHDC](?:[1][0-3]\b|[1-9]\b))/
           record.errors[:card_info] << "#{index + 1}枚目のカード情報が適切ではありません。(#{card})"
           invalid = true
         end

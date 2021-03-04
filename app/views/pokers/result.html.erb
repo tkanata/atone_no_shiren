@@ -13,9 +13,11 @@
   <div>
     <% if @poker.errors.any? %>
       <div class = "alert">
+        <ul>
         <% @poker.errors.full_messages.each do |message| %>
-          <%= message %> <br>
-          <% end %>
+          <li><%= message %> <br>
+        <% end %>
+        </ul>
       </div>
     <% end %>
   </div>

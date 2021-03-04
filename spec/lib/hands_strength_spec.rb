@@ -62,7 +62,7 @@ RSpec.describe 'HandsStrength' do
                                                         :error => [
                                                           {
                                                             'card' => '',
-                                                            'msg' => '値を入力してください'
+                                                            'msg' => '値を入力してください。'
                                                           },
                                                           {
                                                             'card' => 'S12 D12 H5 C1S10',

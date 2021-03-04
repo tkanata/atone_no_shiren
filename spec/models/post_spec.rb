@@ -20,7 +20,7 @@ RSpec.describe Poker, type: :model do
       it 'is not valid with empty card information' do
         poker = Poker.new(card_info:'')
         poker.valid?
-        expect(poker.errors[:card_info]).to include('値を入力してください')
+        expect(poker.errors[:card_info]).to include('値を入力してください。')
       end
 
       it 'is not valid with too much card information' do
@@ -119,8 +119,14 @@ RSpec.describe Poker, type: :model do
         expect(poker.errors[:card_info]).to include('5枚目のカード情報が適切ではありません。(S0)')
       end
 
-      it 'is not valid without a space between the each card' do
+      it 'is not valid without a half width space between the each card' do
         poker = Poker.new(card_info:'S1 S2 S3 S4S5')
+        poker.valid?
+        expect(poker.errors[:card_info]).to include('5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）')
+      end
+
+      it 'is not valid with a full width space between the card' do
+        poker = Poker.new(card_info: 'S1 S2 S3 S4　S5')
         poker.valid?
         expect(poker.errors[:card_info]).to include('5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）')
       end
@@ -128,7 +134,13 @@ RSpec.describe Poker, type: :model do
       it 'is not valid with duplicated card' do
         poker = Poker.new(card_info:'S1 S2 S3 S1 H2')
         poker.valid?
-        expect(poker.errors[:card_info]).to include('カードが重複しています')
+        expect(poker.errors[:card_info]).to include('カードが重複しています。')
+      end
+
+      it 'is not valid with duplicated card and wrong suit' do
+        poker = Poker.new(card_info: 'S1 S2 S1 S5 K12')
+        poker.valid?
+        expect(poker.errors[:card_info]).to include('カードが重複しています。', '5枚目のカード情報が適切ではありません。(K12)')
       end
 
     end

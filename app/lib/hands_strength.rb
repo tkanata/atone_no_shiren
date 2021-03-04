@@ -5,7 +5,8 @@ module HandsStrength
   # 出力は card, hand, best をキーとしたハッシュとする
 
   def self.hands(cards_arr)
-
+    
+    # 役の名前(文字列)を配列に格納
     each_hand = cards_arr.map { |cards|
       HandCommon.hand_common(cards)
     }
@@ -27,6 +28,7 @@ module HandsStrength
     }
     strength.class
 
+    # 入力されたカードの役と上記の数字を紐付け
     strength_key = each_hand_hash.map{ |key, each_hand|
       strength.key(each_hand)
     }
@@ -34,41 +36,40 @@ module HandsStrength
     # 役の強さを表す数字が格納された配列内を数字の大きさで並べ替え
     strength_key_sort = strength_key.sort.reverse
 
-    # 最も強い役を数字と役のハッシュから探し出す
+    # 最も強い役は0番目に格納されている
     strongest_hand = strength[strength_key_sort[0]]
 
     # 最も強い役を持つカードの組を入力と役のハッシュから探し出す
-    @strongest_cards = each_hand_hash.key(strongest_hand)
+    strongest_cards = each_hand_hash.key(strongest_hand)
 
     # 入力されたカードの組が最も強い役を持つかどうかを判定する
     strongest_boolean = cards_arr.map { |cards|
-      if cards == @strongest_cards
+      if cards == strongest_cards
         cards = "true"
       else
         cards = "false"
       end
     }
 
-    # 入力されたカードの組、役、最強かどうかの真理値を配列に格納する
+    # 入力されたカードの "組"、"役"、"最強かどうかの真理値" を配列に格納する
     input_hand_strongest = cards_arr.zip(each_hand, strongest_boolean)
-
     @input_hand_strongest_hash = input_hand_strongest.map do |input_hash|
-        a = ["card", "hand", "best"]
-        a.zip(input_hash).to_h
+        ["card", "hand", "best"].zip(input_hash).to_h
     end
 
     return @input_hand_strongest_hash
   end
 
+  ################################################################################################
   # self.hands(cards_arr)の出力とエラーメッセージを含むデータをAPIの出力用ハッシュに整えるメソッド
-  ######################################
+  ################################################################################################
+
   def self.output_api(params)
+
     errors = params.map do |each_card|
       b = Poker.new(card_info: each_card)
       b.validate
-      errors_arr = b.errors.full_messages
-      # エラーメッセージは配列に格納されている。今回は1つしかメッセージが出ないので、0番目の要素のみを取り出している
-      errors_arr[0]
+      errors_arr = b.errors.full_messages.join(' ')
     end
 
     # カード情報とエラーメッセージの紐付け
@@ -76,7 +77,7 @@ module HandsStrength
 
     # エラーが出ないと空の要素が配列に残るので、それを消している
     cards_errors_arr.delete_if do |key, error|
-      error.nil?
+      error.empty?
     end
 
     # エラーの配列から"card"と"msg"をキーとするハッシュを作っている
