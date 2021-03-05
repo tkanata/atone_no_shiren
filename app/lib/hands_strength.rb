@@ -5,26 +5,24 @@ module HandsStrength
   # 出力は card, hand, best をキーとしたハッシュとする
 
   def self.hands(cards_arr)
-    
+
     # 役の名前(文字列)を配列に格納
-    each_hand = cards_arr.map { |cards|
-      HandCommon.hand_common(cards)
-    }
+    each_hand = cards_arr.map { |cards| HandCommon.hand_common(cards) }
 
     # 入力されたカードの組とその役をハッシュに変換している(keyがカード、valueが役)
     each_hand_hash = cards_arr.zip(each_hand).to_h
 
     # 役の強さはそれぞれに割り振った数字で管理する
     strength = {
-      9 => 'ストレートフラッシュ',
-      8 => 'フォー・オブ・ア・カインド',
-      7 => 'フルハウス',
-      6 => 'フラッシュ',
-      5 => 'ストレート',
-      4 => 'スリー・オブ・ア・カインド',
-      3 => 'ツーペア',
-      2 => 'ワンペア',
-      1 => 'ハイカード',
+      9 => ENV['STRAIGHT_FLASH'],
+      8 => ENV['FOUR_OF_A_KIND'],
+      7 => ENV['FULL_HOUSE'],
+      6 => ENV['FLASH'],
+      5 => ENV['STRAIGHT'],
+      4 => ENV['THREE_OF_A_KIND'],
+      3 => ENV['TWO_PAIR'],
+      2 => ENV['ONE_PAIR'],
+      1 => ENV['HIGH_CARD'],
     }
     strength.class
 
@@ -44,11 +42,7 @@ module HandsStrength
 
     # 入力されたカードの組が最も強い役を持つかどうかを判定する
     strongest_boolean = cards_arr.map { |cards|
-      if cards == strongest_cards
-        cards = 'true'
-      else
-        cards = 'false'
-      end
+      cards == strongest_cards ? 'true' : 'false'
     }
 
     # 入力されたカードの '組'、'役'、'最強かどうかの真理値' を配列に格納する
@@ -69,7 +63,7 @@ module HandsStrength
     errors = params.map do |each_card|
       b = Poker.new(card_info: each_card)
       b.validate
-      errors_arr = b.errors.full_messages.join(' ')
+      each_error = b.errors.full_messages.join(' ')
     end
 
     # カード情報とエラーメッセージの紐付け

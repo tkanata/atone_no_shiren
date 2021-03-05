@@ -3,13 +3,16 @@ class PokerValidator < ActiveModel::Validator
   def validate(record)
     # 入力が存在しかつ単語がスペース区切りの場合のみ重複とカードごとのバリデーションを実行する
     if record.card_info.empty?
-      record.errors[:card_info] << '値を入力してください。'
+      record.errors[:card_info] << Settings.ERROR_MESSAGE.EMPTY
     else
       if !record.card_info.match(/\A\w+ \w+ \w+ \w+ \w+\z/)
-        record.errors[:card_info] << '5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
+        record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
+        if record.card_info.split(' ').count > 5
+          record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。"
+        end
       end
       if record.card_info.match(/([SHDC](?:[1][0-3]\b|[1-9]\b)).+\b(\1)\b/)
-        record.errors[:card_info] << 'カードが重複しています。'
+        record.errors[:card_info] << Settings.ERROR_MESSAGE.DUPLICATE
       end
       
 
@@ -22,7 +25,7 @@ class PokerValidator < ActiveModel::Validator
       end
 
       if invalid == true
-        record.errors[:card_info] << '半角英字大文字のスート（S,H,D,C）と数字（1〜13）の組み合わせでカードを指定してください。'
+        record.errors[:card_info] << Settings.ERROR_MESSAGE.VALID_SUIT_NUM
       end
     end
   end

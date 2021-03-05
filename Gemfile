@@ -32,7 +32,8 @@ gem 'grape', '~> 1.5', '>= 1.5.2'
 gem 'grape-jbuilder', '~> 0.2.0'
 gem 'hashie', '~> 4.1'
 gem 'rexml', '~> 3.2', '>= 3.2.4'
-
+gem 'config', '~> 3.0'
+gem 'dotenv-rails', '~> 2.7', '>= 2.7.6'
 # ランダムな名前やメールアドレスを生成する
 gem 'faker', '~> 2.15', '>= 2.15.1'
 
@@ -63,7 +64,6 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1', '>= 2.1.1'
-  gem 'spring-commands-rspec', '~> 1.0', '>= 1.0.4'
 end
 
 group :test do

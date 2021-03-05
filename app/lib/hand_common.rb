@@ -8,40 +8,33 @@ module HandCommon
     
     #フラッシュ、ストレートフラッシュ、ストレートの判定を先に行う
 
-    # スートの判定
-    # H, S, C, D を取得。配列で返す
-    heart = card.scan('H')
-    club = card.scan('C')
-    spade = card.scan('S')
-    dia = card.scan('D')
-
     flash = false
 
     # フラッシュの判定
-    if heart.size == 5 || club.size ==5 || spade.size == 5 || dia.size ==5
+    if card.scan('H').size == 5 || card.scan('C').size ==5 || card.scan('S').size == 5 || card.scan('D').size ==5
       flash = true
     end
 
-    # 番号のみを抜き出して並べ替える
-    num = card.scan(/\d+/).sort
+    # 番号のみを抜き出して左から小さい順に並べ替える
+    num = card.scan(/\d+/).sort.map(&:to_i)
 
-
-    for n in 1..4 do
-      if num[0].to_i + n != num[n].to_i
-        straight = false
-        break
-      else
-        straight = true
-      end
+    serial_num_check = num.map.with_index do |each_num, index|
+      each_num = num[0] + index
     end
 
+    # 連番の判定
+    straight =true if num == serial_num_check
+
+    # 上記のパターンに一致しない例外的なストレートフラッシュ
+    straight = true if num == ['1', '10', '11', '12', '13']
+   
     # ストレートフラッシュ、ストレート、フラッシュの判定
     if straight && flash
-      @hand = 'ストレートフラッシュ'
+      @hand = ENV['STRAIGHT_FLASH']
     elsif straight
-      @hand = 'ストレート'
+      @hand = ENV['STRAIGHT']
     elsif flash
-      @hand = 'フラッシュ'
+      @hand = ENV['FLASH']
     else
       @hand = false
     end
@@ -53,44 +46,39 @@ module HandCommon
     num = num.map!(&:to_i)
 
     # 数字ごとにグループ化してハッシュ形式に変換
-    group = num.group_by(&:itself).map do |key, value|
-      [key, value.count]
-    end.to_h
-
-    # 重複した数字の組数で役を判断
-    # 役が確定した段階でbreakし、@hand を戻り値として処理を終了
+    group_hash = num.group_by(&:itself).map { |key, value| [key, value.count] }.to_h
 
     # 初期化
-    @pair = 0
-    @three_of_a_kind = false
+    pair = 0
+    three_of_a_kind = false
 
     # 重複の数によって役を判定
-    group.values.sort.reverse.each do |value|
+    group_hash.values.sort.reverse.each do |value|
 
       if value == 4
-        @hand = 'フォー・オブ・ア・カインド'
+        @hand = ENV['FOUR_OF_A_KIND']
         break
       elsif value == 3
-        @three_of_a_kind = true
+        three_of_a_kind = true
       elsif value == 2
-        @pair += 1
-        if @three_of_a_kind
-          @hand = 'フルハウス'
+        pair += 1
+        if three_of_a_kind
+          @hand = ENV['FULL_HOUSE']
           break
         end
       else
-        if @three_of_a_kind
-          @hand = 'スリー・オブ・ア・カインド'
+        if three_of_a_kind
+          @hand = ENV['THREE_OF_A_KIND']
           break
         end
       end
 
-      if @pair == 1
-        @hand = 'ワンペア'
-      elsif @pair == 2
-        @hand = 'ツーペア'
+      if pair == 1
+        @hand = ENV['ONE_PAIR']
+      elsif pair == 2
+        @hand = ENV['TWO_PAIR']
       else
-        @hand = 'ハイカード'
+        @hand = ENV['HIGH_CARD']
       end
 
     end

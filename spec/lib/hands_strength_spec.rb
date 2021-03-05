@@ -14,17 +14,17 @@ RSpec.describe 'HandsStrength' do
                                                 [
                                                   {
                                                     'card' => 'H1 H13 H12 H11 H10',
-                                                    'hand' => 'フラッシュ',
+                                                    'hand' => ENV['FLASH'],
                                                     'best' => 'false'
                                                   },
                                                  {
                                                     'card' => 'S1 H1 D1 S4 H4',
-                                                    'hand' => 'フルハウス',
+                                                    'hand' => ENV['FULL_HOUSE'],
                                                     'best' => 'true'
                                                   },
                                                  {
                                                     'card' => 'S12 D12 H5 C1 S10',
-                                                    'hand' => 'ワンペア',
+                                                    'hand' => ENV['ONE_PAIR'],
                                                     'best' => 'false'
                                                   },
                                                 ]
@@ -40,10 +40,26 @@ RSpec.describe 'HandsStrength' do
   describe 'self.output_api(params)' do
     context 'when input is valid' do
       it 'returns {:result => HandsStrength.hands(input)} without any error message' do
-        params = ['S1 H1 D1 S4 H4', 'S12 D12 H5 C1 S10', 'S12 D12 H5 C1 S10']
+        params = ['S1 H1 D1 S4 H4', 'S12 D12 H5 C1 S10', 'S11 D12 H5 C1 S10']
         expect(HandsStrength.output_api(params)).to eq(
                                                       {
-                                                        :result => HandsStrength.hands(params)
+                                                        :result => [
+                                                          {
+                                                            'card'=> 'S1 H1 D1 S4 H4',
+                                                            'hand'=> ENV['FULL_HOUSE'],
+                                                            'best'=> 'true'
+                                                          },
+                                                          {
+                                                            'card'=> 'S12 D12 H5 C1 S10',
+                                                            'hand'=> ENV['ONE_PAIR'],
+                                                            'best'=> 'false'
+                                                          },
+                                                          {
+                                                            'card'=> 'S11 D12 H5 C1 S10',
+                                                            'hand'=> ENV['HIGH_CARD'],
+                                                            'best'=> 'false'
+                                                          }
+                                                        ]
                                                       }
                                                     )
       end
@@ -56,7 +72,13 @@ RSpec.describe 'HandsStrength' do
         expect(HandsStrength.output_api(params)).to eq(
                                                       {
                                                         # 有効なカード情報の結果のみが表示される
-                                                        :result => HandsStrength.hands(valid_params),
+                                                        :result => [
+                                                          {
+                                                            'card' => 'S1 H1 D1 S4 H4',
+                                                            'hand' => ENV['FULL_HOUSE'],
+                                                            'best' => 'true'
+                                                          }
+                                                        ],
 
                                                         # 無効なカード情報に関するエラーが表示される
                                                         :error => [
