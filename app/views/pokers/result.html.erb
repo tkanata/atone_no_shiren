@@ -3,7 +3,7 @@
  
   <%= render partial: "layouts/form", locals: { poker: @poker } %>
 
-  <% if @poker.valid? %>
+  <% unless @poker.errors.any? %>
     <div class="hand">
       <%= @hand %>
       <%# byebug %>

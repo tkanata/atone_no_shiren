@@ -63,7 +63,7 @@ module HandsStrength
     errors = params.map do |each_card|
       b = Poker.new(card_info: each_card)
       b.validate
-      each_error = b.errors.full_messages.join(' ')
+      each_error = b.errors.full_messages.join("\n")
     end
 
     # カード情報とエラーメッセージの紐付け
@@ -88,12 +88,12 @@ module HandsStrength
 
     # 表示する結果は以下のハッシュ
     unless cards_errors_hash.empty?
-      return @hash = {
+      return hash = {
         result: result,
         error: cards_errors_hash,
       }
     else
-      return @hash = { result: result }
+      return hash = { result: result }
     end
   end
 end

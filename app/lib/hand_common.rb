@@ -26,7 +26,7 @@ module HandCommon
     straight =true if num == serial_num_check
 
     # 上記のパターンに一致しない例外的なストレートフラッシュ
-    straight = true if num == ['1', '10', '11', '12', '13']
+    straight = true if num == [1, 10, 11, 12, 13]
    
     # ストレートフラッシュ、ストレート、フラッシュの判定
     if straight && flash
