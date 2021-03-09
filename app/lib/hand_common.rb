@@ -7,10 +7,8 @@ module HandCommon
   def self.hand_common(card)
     
     #フラッシュ、ストレートフラッシュ、ストレートの判定を先に行う
-
-    flash = false
-
     # フラッシュの判定
+    flash = false
     if card.scan('H').size == 5 || card.scan('C').size ==5 || card.scan('S').size == 5 || card.scan('D').size ==5
       flash = true
     end
@@ -56,20 +54,17 @@ module HandCommon
     group_hash.values.sort.reverse.each do |value|
 
       if value == 4
-        @hand = ENV['FOUR_OF_A_KIND']
-        break
+        return @hand = ENV['FOUR_OF_A_KIND']
       elsif value == 3
         three_of_a_kind = true
       elsif value == 2
         pair += 1
         if three_of_a_kind
-          @hand = ENV['FULL_HOUSE']
-          break
+          return @hand = ENV['FULL_HOUSE']
         end
       else
         if three_of_a_kind
-          @hand = ENV['THREE_OF_A_KIND']
-          break
+          return @hand = ENV['THREE_OF_A_KIND']
         end
       end
 
