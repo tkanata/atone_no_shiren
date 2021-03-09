@@ -3,7 +3,6 @@
 # 出力：役の名前を文字列で返す
 
 module HandCommon
-
   def self.hand_common(card)
     # フラッシュ、ストレートフラッシュ、ストレートの判定を先に行う
     # フラッシュの判定

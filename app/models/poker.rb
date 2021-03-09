@@ -4,8 +4,8 @@ class PokerValidator < ActiveModel::Validator
     if record.card_info.nil?
       record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
 
-      elsif record.card_info.empty?
-        record.errors[:card_info] << Settings.ERROR_MESSAGE.EMPTY
+    elsif record.card_info.empty?
+      record.errors[:card_info] << Settings.ERROR_MESSAGE.EMPTY
 
     else
       unless record.card_info.match(Settings.REGEX.HALF_WIDTH_SPACE)
