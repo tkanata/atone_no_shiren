@@ -10,9 +10,8 @@ class PokerValidator < ActiveModel::Validator
     else
       unless record.card_info.match(Settings.REGEX.HALF_WIDTH_SPACE)
         record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
-        if record.card_info.split(' ').count > 5
-          record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。"
-        end
+        # 5枚以上のカードが入力されたら枚数を表示するバリデーション
+        how_many_card(record)
       end
 
       record.errors[:card_info] << Settings.ERROR_MESSAGE.DUPLICATE if record.card_info.match(Settings.REGEX.DUPLICATED)
@@ -29,6 +28,15 @@ class PokerValidator < ActiveModel::Validator
 
     end
   end
+
+  private
+
+  def how_many_card(record)
+    if record.card_info.split(' ').count > 5
+      record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。"
+    end
+  end
+
 end
 
 # モデルではバリデーションを行う

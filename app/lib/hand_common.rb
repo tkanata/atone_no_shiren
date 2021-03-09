@@ -38,16 +38,17 @@ module HandCommon
     group_hash = num.group_by(&:itself).transform_values(&:count)
 
     # 初期化
-    pair = 0
+    n = 0
+    pair = n
     three_of_a_kind = false
 
     # 重複の数によって役を判定
     group_hash.values.sort.reverse.each do |value|
-      return hand = ENV['FOUR_OF_A_KIND'] if value == 4
+      return hand = ENV['FOUR_OF_A_KIND'] if value == n + 4
 
-      if value == 3
+      if value == n + 3
         three_of_a_kind = true
-      elsif value == 2
+      elsif value == n + 2
         pair += 1
         return hand = ENV['FULL_HOUSE'] if three_of_a_kind
       elsif three_of_a_kind

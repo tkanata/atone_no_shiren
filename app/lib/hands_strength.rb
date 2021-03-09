@@ -15,15 +15,15 @@ module HandsStrength
 
     # 役の強さはそれぞれに割り振った数字で管理する
     strength = {
-      9 => ENV['STRAIGHT_FLASH'],
-      8 => ENV['FOUR_OF_A_KIND'],
-      7 => ENV['FULL_HOUSE'],
-      6 => ENV['FLASH'],
-      5 => ENV['STRAIGHT'],
-      4 => ENV['THREE_OF_A_KIND'],
-      3 => ENV['TWO_PAIR'],
-      2 => ENV['ONE_PAIR'],
-      1 => ENV['HIGH_CARD']
+      Settings.HANDS_STRENGTH.STRAIGHT_FLASH => ENV['STRAIGHT_FLASH'],
+      Settings.HANDS_STRENGTH.FOUR_OF_A_KIND => ENV['FOUR_OF_A_KIND'],
+      Settings.HANDS_STRENGTH.FULL_HOUSE => ENV['FULL_HOUSE'],
+      Settings.HANDS_STRENGTH.FLASH => ENV['FLASH'],
+      Settings.HANDS_STRENGTH.STRAIGHT => ENV['STRAIGHT'],
+      Settings.HANDS_STRENGTH.THREE_OF_A_KIND => ENV['THREE_OF_A_KIND'],
+      Settings.HANDS_STRENGTH.TWO_PAIR => ENV['TWO_PAIR'],
+      Settings.HANDS_STRENGTH.ONE_PAIR => ENV['ONE_PAIR'],
+      Settings.HANDS_STRENGTH.HIGH_CARD => ENV['HIGH_CARD']
     }
     strength.class
 
@@ -72,6 +72,8 @@ module HandsStrength
       %w[card msg].zip(each_pair).to_h
     end
 
+    # cards_errors_hash = HandsStrength.errors_api(params)
+
     valid_params = params.delete_if do |param|
       Poker.new(card_info: param).validate == false
     end
@@ -88,4 +90,54 @@ module HandsStrength
       }
     end
   end
+
+
+
+#  private
+
+
+=begin
+  def self.errors_api(params)
+    errors = params.map do |card_set|
+      b = Poker.new(card_info: card_set)
+      b.validate
+      b.errors.full_messages.join("\n")
+    end
+
+    # 全てのカードを結合して配列に格納
+    all_cards_arr = []
+    all_cards_arr[0] = params.join(' ')
+
+    # 重複したカードが配列に格納される
+    matched_card_arr = all_cards_arr[0].match(Settings.REGEX.DUPLICATED)
+
+    # 入力された手札の中から重複している手札を探す
+    errors_duplicate = params.map do |card_set|
+      matched_card_arr.captures.map do |matched|
+        if card_set.include?(matched)
+          "他の手札のカードと重複しています。(#{matched})"
+        end
+      end
+    end.flatten
+
+    all_errors = errors.zip(errors_duplicate).each do |error|
+      error.join("\n")
+    end
+
+    # カード情報とエラーメッセージの紐付け
+    cards_errors_arr = params.zip(all_errors)
+
+    # エラーが出ないと空の要素が配列に残るので、それを消している
+    cards_errors_arr.delete_if do |_, error|
+      error.empty?
+    end
+
+    # エラーの配列から'card'と'msg'をキーとするハッシュを作っている
+    cards_errors_arr.map do |each_pair|
+      %w[card msg].zip(each_pair).to_h
+    end
+  end
+=end
+
+
 end

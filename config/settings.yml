@@ -7,3 +7,13 @@ REGEX:
   DUPLICATED: !ruby/regexp /(\b[SHDC](?:[1][0-3]\b|[1-9]\b)).+\b(\1)\b/
   HALF_WIDTH_SPACE: !ruby/regexp /\A\w+ \w+ \w+ \w+ \w+\z/
   EACH_CARD: !ruby/regexp /(\b[SHDC](?:[1][0-3]\b|[1-9]\b))/
+HANDS_STRENGTH:
+  STRAIGHT_FLASH: 900
+  FOUR_OF_A_KIND: 800
+  FULL_HOUSE: 700
+  FLASH: 600
+  STRAIGHT: 500
+  THREE_OF_A_KIND: 400
+  TWO_PAIR: 300
+  ONE_PAIR: 200
+  HIGH_CARD: 100
