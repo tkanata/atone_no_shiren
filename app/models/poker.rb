@@ -1,8 +1,5 @@
 class PokerValidator < ActiveModel::Validator
-  #カード5枚分の入力を分割して、1枚ずつバリデーションをかけるメソッド
   def validate(record)
-    # 入力が存在しかつ単語がスペース区切りの場合のみ重複とカードごとのバリデーションを実行する
-
     if record.card_info.nil?
       record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
 
@@ -28,9 +25,11 @@ class PokerValidator < ActiveModel::Validator
       record.errors[:card_info] << Settings.ERROR_MESSAGE.VALID_SUIT_NUM if invalid == true
 
     end
+
   end
 end
 
+# モデルではバリデーションを行う
 class Poker < ApplicationRecord
   include ActiveModel::Model
   include ActiveModel::Validations

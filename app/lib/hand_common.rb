@@ -25,17 +25,17 @@ module HandCommon
    
     # ストレートフラッシュ、ストレート、フラッシュの判定
     if straight && flash
-      @hand = ENV['STRAIGHT_FLASH']
+      hand = ENV['STRAIGHT_FLASH']
     elsif straight
-      @hand = ENV['STRAIGHT']
+      hand = ENV['STRAIGHT']
     elsif flash
-      @hand = ENV['FLASH']
+      hand = ENV['FLASH']
     else
-      @hand = false
+      hand = false
     end
 
     # ストレートフラッシュ、フラッシュ、ストレートのいずれかならば、@handを返して終了する
-    return @hand if @hand
+    return hand if hand
 
     # 数字ごとにグループ化してハッシュ形式に変換
     group_hash = num.group_by(&:itself).map { |key, value| [key, value.count] }.to_h
@@ -47,26 +47,26 @@ module HandCommon
     # 重複の数によって役を判定
     group_hash.values.sort.reverse.each do |value|
       if value == 4
-        return @hand = ENV['FOUR_OF_A_KIND']
+        return hand = ENV['FOUR_OF_A_KIND']
       elsif value == 3
         three_of_a_kind = true
       elsif value == 2
         pair += 1
-        return @hand = ENV['FULL_HOUSE'] if three_of_a_kind
+        return hand = ENV['FULL_HOUSE'] if three_of_a_kind
       else
-        return @hand = ENV['THREE_OF_A_KIND'] if three_of_a_kind
+        return hand = ENV['THREE_OF_A_KIND'] if three_of_a_kind
       end
 
       if pair == 1
-        @hand = ENV['ONE_PAIR']
+        hand = ENV['ONE_PAIR']
       elsif pair == 2
-        @hand = ENV['TWO_PAIR']
+        hand = ENV['TWO_PAIR']
       else
-        @hand = ENV['HIGH_CARD']
+        hand = ENV['HIGH_CARD']
       end
     end
 
-    return @hand
+    return hand
 
   end
 end
