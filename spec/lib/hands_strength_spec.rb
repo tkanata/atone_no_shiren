@@ -14,13 +14,13 @@ RSpec.describe 'HandsStrength' do
                                                 [
                                                   {
                                                     'card' => 'H1 H13 H12 H11 H10',
-                                                    'hand' => ENV['FLASH'],
-                                                    'best' => 'false'
+                                                    'hand' => ENV['STRAIGHT_FLASH'],
+                                                    'best' => 'true'
                                                   },
                                                  {
                                                     'card' => 'S1 H1 D1 S4 H4',
                                                     'hand' => ENV['FULL_HOUSE'],
-                                                    'best' => 'true'
+                                                    'best' => 'false'
                                                   },
                                                  {
                                                     'card' => 'S12 D12 H5 C1 S10',
@@ -68,31 +68,31 @@ RSpec.describe 'HandsStrength' do
     context 'when one or more input is invalid' do
       it 'returns result with valid input and error message with invalid input' do
         params = ['S1 H1 D1 S4 H4', '', 'S12 D12 H5 C1S10']
-        valid_params = ['S1 H1 D1 S4 H4']
-        expect(HandsStrength.output_api(params)).to eq(
-                                                      {
-                                                        # 有効なカード情報の結果のみが表示される
-                                                        :result => [
-                                                          {
-                                                            'card' => 'S1 H1 D1 S4 H4',
-                                                            'hand' => ENV['FULL_HOUSE'],
-                                                            'best' => 'true'
-                                                          }
-                                                        ],
-
-                                                        # 無効なカード情報に関するエラーが表示される
-                                                        :error => [
-                                                          {
-                                                            'card' => '',
-                                                            'msg' => '値を入力してください。'
-                                                          },
-                                                          {
-                                                            'card' => 'S12 D12 H5 C1S10',
-                                                            'msg' => '5つのカード指定文字を半角スペース区切りで入力してください。（例："S1 H3 D9 C13 S11"）'
-                                                          },
-                                                        ]
-                                                      }
-                                                    )
+        expect(
+          HandsStrength.output_api(params)
+        ).to eq(
+                            {
+                              # 有効なカード情報の結果のみが表示される
+                              :result => [
+                                {
+                                  'card' => 'S1 H1 D1 S4 H4',
+                                  'hand' => ENV['FULL_HOUSE'],
+                                  'best' => 'true'
+                                }
+                              ],
+                              # 無効なカード情報に関するエラーが表示される
+                              :error => [
+                                {
+                                  'card' => '',
+                                  'msg' => Settings.ERROR_MESSAGE.EMPTY
+                                },
+                                {
+                                  'card' => 'S12 D12 H5 C1S10',
+                                  'msg' => Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE + "\n4枚目のカード情報が適切ではありません。(C1S10)\n" + Settings.ERROR_MESSAGE.VALID_SUIT_NUM
+                                },
+                              ]
+                            }
+             )
       end
     end
   end
