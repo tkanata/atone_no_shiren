@@ -10,32 +10,26 @@ class PokerValidator < ActiveModel::Validator
       record.errors[:card_info] << Settings.ERROR_MESSAGE.EMPTY
 
     else
-      if !record.card_info.match(/\A\w+ \w+ \w+ \w+ \w+\z/)
+      if !record.card_info.match(Settings.REGEX.HALF_WIDTH_SPACE)
         record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
-        if record.card_info.split(' ').count > 5
-          record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。"
-        end
+        record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。" if record.card_info.split(' ').count > 5
       end
-      if record.card_info.match(/(\b[SHDC](?:[1][0-3]\b|[1-9]\b)).+\b(\1)\b/)
-        record.errors[:card_info] << Settings.ERROR_MESSAGE.DUPLICATE
-      end
-      
+
+      record.errors[:card_info] << Settings.ERROR_MESSAGE.DUPLICATE if record.card_info.match(Settings.REGEX.DUPLICATED)
 
       invalid = false
       record.card_info.split(' ').each_with_index do |card, index|
-        if card !~ /(\b[SHDC](?:[1][0-3]\b|[1-9]\b))/
+        if card !~ Settings.REGEX.EACH_CARD
           record.errors[:card_info] << "#{index + 1}枚目のカード情報が適切ではありません。(#{card})"
           invalid = true
         end
       end
 
-      if invalid == true
-        record.errors[:card_info] << Settings.ERROR_MESSAGE.VALID_SUIT_NUM
-      end
+      record.errors[:card_info] << Settings.ERROR_MESSAGE.VALID_SUIT_NUM if invalid == true
+
     end
   end
 end
-
 
 class Poker < ApplicationRecord
   include ActiveModel::Model
