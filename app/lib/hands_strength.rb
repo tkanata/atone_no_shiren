@@ -26,13 +26,8 @@ module HandsStrength
     }
     strength.class
 
-    # 入力されたカードの役と上記の数字を紐付け
-    strength_key = each_hand_hash.map{ |key, each_hand|
-      strength.key(each_hand)
-    }
-
-    # 役の強さを表す数字が格納された配列内を数字の大きさで並べ替え
-    strength_key_sort = strength_key.sort.reverse
+    # 入力されたカードの役と上記の数字を紐付け。配列の左から数字が大きい順に並ぶ。
+    strength_key_sort = each_hand_hash.map{ |key, each_hand| strength.key(each_hand) }.sort.reverse
 
     # 最も強い役は0番目に格納されている
     strongest_hand = strength[strength_key_sort[0]]
@@ -41,17 +36,18 @@ module HandsStrength
     strongest_cards = each_hand_hash.key(strongest_hand)
 
     # 入力されたカードの組が最も強い役を持つかどうかを判定する
-    strongest_boolean = cards_arr.map { |cards|
-      cards == strongest_cards ? 'true' : 'false'
-    }
+    strongest_boolean = cards_arr.map { |cards| cards == strongest_cards ? 'true' : 'false' }
 
     # 入力されたカードの '組'、'役'、'最強かどうかの真理値' を配列に格納する
     input_hand_strongest = cards_arr.zip(each_hand, strongest_boolean)
-    @input_hand_strongest_hash = input_hand_strongest.map do |input_hash|
+
+    # 上記の配列をハッシュに変換
+    input_hand_strongest_hash = input_hand_strongest.map do |input_hash|
         ['card', 'hand', 'best'].zip(input_hash).to_h
     end
 
-    return @input_hand_strongest_hash
+    return input_hand_strongest_hash
+
   end
 
   ################################################################################################
@@ -76,8 +72,7 @@ module HandsStrength
 
     # エラーの配列から'card'と'msg'をキーとするハッシュを作っている
     cards_errors_hash = cards_errors_arr.map do |each_pair|
-      name = ['card', 'msg']
-      name.zip(each_pair).to_h
+      ['card', 'msg'].zip(each_pair).to_h
     end
 
     valid_params = params.delete_if do |param|
@@ -95,5 +90,6 @@ module HandsStrength
     else
       return { result: result }
     end
+
   end
 end
