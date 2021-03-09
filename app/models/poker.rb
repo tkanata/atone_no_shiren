@@ -1,15 +1,18 @@
+# バリデーションメソッドを定義するクラス
 class PokerValidator < ActiveModel::Validator
   def validate(record)
     if record.card_info.nil?
       record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
 
       elsif record.card_info.empty?
-      record.errors[:card_info] << Settings.ERROR_MESSAGE.EMPTY
+        record.errors[:card_info] << Settings.ERROR_MESSAGE.EMPTY
 
     else
-      if !record.card_info.match(Settings.REGEX.HALF_WIDTH_SPACE)
+      unless record.card_info.match(Settings.REGEX.HALF_WIDTH_SPACE)
         record.errors[:card_info] << Settings.ERROR_MESSAGE.HALF_WIDTH_SPACE
-        record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。" if record.card_info.split(' ').count > 5
+        if record.card_info.split(' ').count > 5
+          record.errors[:card_info] << "カードが#{record.card_info.split(' ').count}枚あります。"
+        end
       end
 
       record.errors[:card_info] << Settings.ERROR_MESSAGE.DUPLICATE if record.card_info.match(Settings.REGEX.DUPLICATED)
@@ -25,7 +28,6 @@ class PokerValidator < ActiveModel::Validator
       record.errors[:card_info] << Settings.ERROR_MESSAGE.VALID_SUIT_NUM if invalid == true
 
     end
-
   end
 end
 
@@ -36,7 +38,6 @@ class Poker < ApplicationRecord
 
   attr_accessor :card_info
 
-  #カスタムバリデーション。nil > 空白 > 5単語が半角スペース区切り > 重複 > 不適切なカード情報 という優先順位の条件分岐
+  # カスタムバリデーション。nil > 空白 > 5単語が半角スペース区切り > 重複 > 不適切なカード情報 という優先順位の条件分岐
   validates_with PokerValidator
-
 end

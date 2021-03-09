@@ -14,10 +14,10 @@ class PokersController < ApplicationController
   end
 
   private
+
   # ポーカーの役を判定するのに必要なcard_infoのみを受け取ることを許可している
   # セキュリティ強化のためのメソッド
   def poker_params
     params.require(:poker).permit(:card_info)
   end
 end
-

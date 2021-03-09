@@ -5,11 +5,10 @@
 module HandCommon
 
   def self.hand_common(card)
-    
-    #フラッシュ、ストレートフラッシュ、ストレートの判定を先に行う
+    # フラッシュ、ストレートフラッシュ、ストレートの判定を先に行う
     # フラッシュの判定
     flash = false
-    if card.scan('H').size == 5 || card.scan('C').size ==5 || card.scan('S').size == 5 || card.scan('D').size ==5
+    if card.scan('H').size == 5 || card.scan('C').size == 5 || card.scan('S').size == 5 || card.scan('D').size == 5
       flash = true
     end
 
@@ -17,28 +16,27 @@ module HandCommon
     num = card.scan(/\d+/).sort.map(&:to_i)
 
     # 連番の判定
-    serialized_num = num.map.with_index { |each_num, index| num[0] + index }
-    straight =true if num == serialized_num
+    serialized_num = num.map.with_index { |_, index| num[0] + index }
+    straight = true if num == serialized_num
 
     # 上記のパターンに一致しない例外的なストレートフラッシュ
     straight = true if num == [1, 10, 11, 12, 13]
-   
     # ストレートフラッシュ、ストレート、フラッシュの判定
-    if straight && flash
-      hand = ENV['STRAIGHT_FLASH']
-    elsif straight
-      hand = ENV['STRAIGHT']
-    elsif flash
-      hand = ENV['FLASH']
-    else
-      hand = false
-    end
+    hand = if straight && flash
+             ENV['STRAIGHT_FLASH']
+           elsif straight
+             ENV['STRAIGHT']
+           elsif flash
+             ENV['FLASH']
+           else
+             false
+           end
 
     # ストレートフラッシュ、フラッシュ、ストレートのいずれかならば、@handを返して終了する
     return hand if hand
 
     # 数字ごとにグループ化してハッシュ形式に変換
-    group_hash = num.group_by(&:itself).map { |key, value| [key, value.count] }.to_h
+    group_hash = num.group_by(&:itself).transform_values(&:count)
 
     # 初期化
     pair = 0
@@ -46,27 +44,27 @@ module HandCommon
 
     # 重複の数によって役を判定
     group_hash.values.sort.reverse.each do |value|
-      if value == 4
-        return hand = ENV['FOUR_OF_A_KIND']
-      elsif value == 3
+      return hand = ENV['FOUR_OF_A_KIND'] if value == 4
+
+      if value == 3
         three_of_a_kind = true
       elsif value == 2
         pair += 1
         return hand = ENV['FULL_HOUSE'] if three_of_a_kind
-      else
-        return hand = ENV['THREE_OF_A_KIND'] if three_of_a_kind
+      elsif three_of_a_kind
+        return hand = ENV['THREE_OF_A_KIND']
       end
 
-      if pair == 1
-        hand = ENV['ONE_PAIR']
-      elsif pair == 2
-        hand = ENV['TWO_PAIR']
-      else
-        hand = ENV['HIGH_CARD']
-      end
+      hand = case pair
+             when 1
+               ENV['ONE_PAIR']
+             when 2
+               ENV['TWO_PAIR']
+             else
+               ENV['HIGH_CARD']
+             end
     end
 
-    return hand
-
+    hand
   end
 end

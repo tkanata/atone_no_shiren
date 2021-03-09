@@ -7,7 +7,6 @@ module HandsStrength
   ################################################################################################
 
   def self.hands(cards_arr)
-
     # 役の名前(文字列)を配列に格納
     each_hand = cards_arr.map { |cards| HandCommon.hand_common(cards) }
 
@@ -24,12 +23,12 @@ module HandsStrength
       4 => ENV['THREE_OF_A_KIND'],
       3 => ENV['TWO_PAIR'],
       2 => ENV['ONE_PAIR'],
-      1 => ENV['HIGH_CARD'],
+      1 => ENV['HIGH_CARD']
     }
     strength.class
 
     # 入力されたカードの役と上記の数字を紐付け。配列の左から数字が大きい順に並ぶ。
-    strength_key_sort = each_hand_hash.map{ |key, each_hand| strength.key(each_hand) }.sort.reverse
+    strength_key_sort = each_hand_hash.map { |_, value| strength.key(value) }.sort.reverse
 
     # 最も強い役は0番目に格納されている
     strongest_hand = strength[strength_key_sort[0]]
@@ -43,13 +42,10 @@ module HandsStrength
     # 入力されたカードの '組'、'役'、'最強かどうかの真理値' を配列に格納する
     input_hand_strongest = cards_arr.zip(each_hand, strongest_boolean)
 
-    # 上記の配列をハッシュに変換
-    input_hand_strongest_hash = input_hand_strongest.map do |input_hash|
-        ['card', 'hand', 'best'].zip(input_hash).to_h
+    # 上記の配列をハッシュに変換して戻り値とする
+    input_hand_strongest.map do |input_hash|
+      %w[card hand best].zip(input_hash).to_h
     end
-
-    return input_hand_strongest_hash
-
   end
 
   ################################################################################################
@@ -57,7 +53,6 @@ module HandsStrength
   ################################################################################################
 
   def self.output_api(params)
-
     errors = params.map do |each_card|
       b = Poker.new(card_info: each_card)
       b.validate
@@ -68,13 +63,13 @@ module HandsStrength
     cards_errors_arr = params.zip(errors)
 
     # エラーが出ないと空の要素が配列に残るので、それを消している
-    cards_errors_arr.delete_if do |key, error|
+    cards_errors_arr.delete_if do |_, error|
       error.empty?
     end
 
     # エラーの配列から'card'と'msg'をキーとするハッシュを作っている
     cards_errors_hash = cards_errors_arr.map do |each_pair|
-      ['card', 'msg'].zip(each_pair).to_h
+      %w[card msg].zip(each_pair).to_h
     end
 
     valid_params = params.delete_if do |param|
@@ -83,15 +78,14 @@ module HandsStrength
 
     result = HandsStrength.hands(valid_params)
 
-    # 表示する結果は以下のハッシュ
-    unless cards_errors_hash.empty?
-      return {
-        result: result,
-        error: cards_errors_hash,
-      }
+    # 以下のハッシュを戻り値とする
+    if cards_errors_hash.empty?
+      { result: result }
     else
-      return { result: result }
+      {
+        result: result,
+        error: cards_errors_hash
+      }
     end
-
   end
 end
