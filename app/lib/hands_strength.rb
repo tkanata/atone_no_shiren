@@ -59,23 +59,22 @@ module HandsStrength
       b.errors.full_messages.join("\n")
     end
 
-    # カード情報とエラーメッセージの紐付け
-    cards_errors_arr = params.zip(errors)
-
-    # エラーが出ないと空の要素が配列に残るので、それを消している
-    cards_errors_arr.delete_if do |_, error|
+    # カード情報とエラーメッセージの紐付け。エラーメッセージが存在しない場合は、要素ごと削除。
+    cards_errors_arr = params.zip(errors).delete_if do |_, error|
       error.empty?
     end
 
-    # エラーの配列から'card'と'msg'をキーとするハッシュを作っている
+    # エラーの配列からcardとmsgをキーとするハッシュを作っている
     cards_errors_hash = cards_errors_arr.map do |each_pair|
       %w[card msg].zip(each_pair).to_h
     end
 
+    # 正常な値のみを取り出す。
     valid_params = params.delete_if do |param|
       Poker.new(card_info: param).validate == false
     end
 
+    # resultには正常な値しか格納しない。
     result = HandsStrength.hands(valid_params)
 
     # 以下のハッシュを戻り値とする
