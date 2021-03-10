@@ -65,6 +65,7 @@ module HandCommon
              end
     end
 
+    # handを戻り値とする
     hand
   end
 end
